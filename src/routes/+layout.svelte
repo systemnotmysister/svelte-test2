@@ -47,6 +47,32 @@
     <p>© 2025 Rick & Morty Catalog</p>
   </footer>
 <style>
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #eaeaea;
+}
+
   /* Здесь можно добавить стили для шапки, навигации и футера */
   header {
     background: var(--primary);

@@ -45,23 +45,28 @@
 </table>
 
 <style>
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
 
-  th, td {
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    text-align: left;
-  }
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
 
-  th {
-    background-color: #f4f4f4;
-  }
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #eaeaea;
+}
 </style>
