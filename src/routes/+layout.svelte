@@ -10,11 +10,10 @@
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/characters">Characters</a></li>
-        <li><a href="/season/1">Season </a></li>
+        <li><a href="/season/01">Season </a></li>
       </ul>
     </nav>
 
-    <!-- Таблица отображает данные из пропсов -->
     <input
       type="search"
       name="search"
@@ -72,8 +71,6 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #eaeaea;
 }
-
-  /* Здесь можно добавить стили для шапки, навигации и футера */
   header {
     background: var(--primary);
     padding: 1rem;
@@ -88,11 +85,6 @@ tr:hover {
     width: 100%;
   }
 
-  /* nav ul {
-    list-style-type: none;
-    padding: 0;
-  } */
-
   nav a {
     /* text-decoration: none; */
     margin-right: 1rem;
@@ -105,8 +97,9 @@ tr:hover {
   main {
     padding: 3rem;
     /* margin: 0 auto; */
-    width: 1000px
-  }
+    min-height: 50%;
+    width: 100%;
+    }
 
   input {
     width: 15%;
@@ -114,7 +107,7 @@ tr:hover {
   }
 
 main {
-  flex: 1; /* Главная часть страницы будет занимать всё доступное пространство */
+  flex: 1; 
 }
 
 footer {
