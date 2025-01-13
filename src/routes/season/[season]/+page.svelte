@@ -1,7 +1,7 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
-  import { onMount, afterUpdate } from 'svelte'; // afterUpdate для отслеживания изменений
-  import { page } from '$app/state'; // Подключаем стор страницы
+  import { onMount, afterUpdate } from 'svelte'; 
+  import { page } from '$app/state'; 
   import { error } from '@sveltejs/kit';
 
   interface Episode {
@@ -91,7 +91,6 @@
   <ul>
     {#each currentSeasonEpisodes as episode}
       <li>
-        <!-- Сделать эпизод кликабельным -->
         <a href={`/season/${currentSeason}/${episode.id}`}>
           {episode.name} ({episode.episode})
         </a>

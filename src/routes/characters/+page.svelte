@@ -10,7 +10,6 @@
     
     let characters: Character[] = [];
     
-    // Запрос для получения списка персонажей
     const query = `
       query {
         characters(page: 10) {
@@ -22,17 +21,16 @@
       }
     `;
     
-    // Функция для получения данных всех персонажей
     const fetchCharacters = async () => {
       try {
         const { data } = await client.query(query, {}).toPromise();
-        characters = data.characters.results;  // Получаем результат из "results"
+        characters = data.characters.results;  
       } catch (error) {
         console.error('Ошибка при получении данных:', error);
       }
     };
     
-    fetchCharacters();  // Вызовем функцию для загрузки списка персонажей
+    fetchCharacters();  
   </script>
   
   <h1>Character List</h1>

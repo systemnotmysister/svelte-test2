@@ -1,6 +1,6 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
-  import { page } from '$app/state';  // Импортируем page store для доступа к параметрам маршрута
+  import { page } from '$app/state'; 
 
   // Типы данных
   interface Character {
@@ -14,7 +14,6 @@
 
   let character: Character | null = null;
 
-  // Запрос для получения данных одного персонажа по ID
   const query = `
     query($id: ID!) {
       character(id: $id) {
@@ -28,7 +27,6 @@
     }
   `;
 
-  // Функция для получения данных персонажа
   const fetchCharacter = async (id: number) => {
     try {
       const { data } = await client.query(query, { id }).toPromise();
@@ -42,11 +40,10 @@
     }
   };
 
-  // Подписка на изменения параметров маршрута
   $: {
-    const characterId = page.params.characterId;  // Получаем параметр characterId из маршрута
+    const characterId = page.params.characterId;  
     if (characterId) {
-      fetchCharacter(parseInt(characterId));  // Загружаем данные для этого персонажа
+      fetchCharacter(parseInt(characterId));  
     }
   }
 </script>

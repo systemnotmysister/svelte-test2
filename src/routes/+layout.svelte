@@ -3,12 +3,10 @@
   import { gql } from '@urql/core';
   import { onMount } from 'svelte';
 
-  // Данные для навигации
   export let characters: { id: number; name: string }[] = [];
   let episodes = [];
   let seasons: any[] = [];
 
-  // GraphQL-запрос для получения эпизодов
   const query = gql`
     query {
       episodes(page: 1) {
@@ -21,7 +19,6 @@
     }
   `;
 
-  // Загружаем данные о сезонах и эпизодах на клиенте
   onMount(async () => {
     try {
       const result = await client.query(query,{}).toPromise();
@@ -32,7 +29,6 @@
 
       episodes = result.data?.episodes?.results || [];
 
-      // Парсинг сезонов из эпизодов
       seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
         const seasonMatch = episode.episode.match(/S(\d+)E/);
         if (seasonMatch) {
@@ -60,7 +56,6 @@
     </ul>
   </nav>
 
-  <!-- Поле поиска -->
   <input
     type="search"
     name="search"
@@ -69,7 +64,6 @@
   />
 </header>
 
-<!-- Таблица персонажей -->
 {#if characters.length > 0}
   <table>
     <thead>
