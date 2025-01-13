@@ -1,6 +1,6 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
-  import { page } from '$app/state'; 
+  import { page } from '$app/state';  // Импортируем page store для доступа к параметрам маршрута
 
   // Типы данных
   interface Character {
@@ -41,9 +41,9 @@
   };
 
   $: {
-    const characterId = page.params.characterId;  
+    const characterId = page.params.characterId; 
     if (characterId) {
-      fetchCharacter(parseInt(characterId));  
+      fetchCharacter(parseInt(characterId)); 
     }
   }
 </script>

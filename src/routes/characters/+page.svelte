@@ -10,6 +10,7 @@
     
     let characters: Character[] = [];
     
+    // Запрос для получения списка персонажей
     const query = `
       query {
         characters(page: 10) {
@@ -30,7 +31,7 @@
       }
     };
     
-    fetchCharacters();  
+    fetchCharacters(); 
   </script>
   
   <h1>Character List</h1>

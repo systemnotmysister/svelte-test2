@@ -1,7 +1,7 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
   import { onMount, afterUpdate } from 'svelte'; 
-  import { page } from '$app/state'; 
+  import { page } from '$app/state';
   import { error } from '@sveltejs/kit';
 
   interface Episode {
@@ -91,7 +91,7 @@
   <ul>
     {#each currentSeasonEpisodes as episode}
       <li>
-        <a href={`/season/${currentSeason}/${episode.id}`}>
+        <a href={`/season/${episode.episode.slice(1, 3)}/${episode.episode.slice(4, 6)}`}>
           {episode.name} ({episode.episode})
         </a>
       </li>

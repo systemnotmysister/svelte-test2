@@ -1,17 +1,18 @@
 import { client } from "$lib/graphqlClient";
 
-// Запрос для получения данных эпизода
-const getEpisodeQuery = (id: string) => `
-  query {
-    episode(id: "${id}") {
-      id
-      name
-      episode
-      air_date
-      characters {
+const getEpisodeQuery = `
+  query ($episode: String!) {
+    episodes(filter: { episode: $episode }) {
+      results {
         id
         name
-        image
+        episode
+        air_date
+        characters {
+          id
+          name
+          image
+        }
       }
     }
   }
@@ -20,18 +21,17 @@ const getEpisodeQuery = (id: string) => `
 export const load = async ({ params }) => {
   const { season, episode } = params;
 
-  // Здесь будем искать эпизод по уникальному ID
-  const episodeId = `${season}${episode}`;
+  const formattedEpisode = `S${season.padStart(2, '0')}E${episode.padStart(2, '0')}`;
 
   try {
-    const result = await client.query(getEpisodeQuery(episodeId), {}).toPromise();
+    const result = await client.query(getEpisodeQuery, { episode: formattedEpisode }).toPromise();
 
     if (result.error) {
-      console.error(`Error fetching episode ${episodeId}:`, result.error);
+      console.error(`Error fetching episode ${formattedEpisode}:`, result.error);
       return { status: 500, error: result.error };
     }
 
-    const episodeData = result.data?.episode;
+    const episodeData = result.data?.episodes?.results[0];
 
     if (!episodeData) {
       return { status: 404, error: 'Episode not found' };

@@ -17,7 +17,7 @@
   }
 
   let episode: Episode | null = null;
-  let loading: boolean = true;
+  let loading = true;
   let error: string | null = null;
 
   const episodeQuery = `
@@ -38,30 +38,30 @@
   `;
 
   const loadEpisode = async () => {
-  const episodeId = page.params.episode;  // Получаем параметр эпизода из URL
-  if (!episodeId) {
-    error = 'Episode not found';
-    loading = false;
-    return;
-  }
+    const season = page.params.season;
+    const episodeNum = page.params.episode;
 
-  // Формируем правильный шаблон эпизода
-  const formattedEpisodeId = episodeId.padStart(2, '0'); // Добавляем ведущий ноль, если эпизод < 10
-  const episodeQueryString = `S${page.params.season}E${formattedEpisodeId}`;
-
-  try {
-    const response = await client.query(episodeQuery, { episode: episodeQueryString }).toPromise();
-    if (response.error) {
-      error = response.error.message;
-    } else {
-      episode = response.data?.episodes?.results[0] || null;
+    if (!season || !episodeNum) {
+      error = 'Episode not found';
+      loading = false;
+      return;
     }
-  } catch (err) {
-    error = 'Error fetching episode data';
-  } finally {
-    loading = false;
-  }
-};
+
+    const formattedEpisode = `S${season.padStart(2, '0')}E${episodeNum.padStart(2, '0')}`;
+
+    try {
+      const response = await client.query(episodeQuery, { episode: formattedEpisode }).toPromise();
+      if (response.error) {
+        error = response.error.message;
+      } else {
+        episode = response.data?.episodes?.results[0] || null;
+      }
+    } catch (err) {
+      error = 'Error fetching episode data';
+    } finally {
+      loading = false;
+    }
+  };
 
   onMount(() => {
     loadEpisode();
