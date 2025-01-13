@@ -1,89 +1,116 @@
-<!-- +layout.svelte -->
-  <script lang="ts">
-    export let characters: { id: number; name: string }[] = [];
-    export const season: { id: number; name: string }[] = [];
+<script lang="ts">
+  import { client } from '$lib/graphqlClient';
+  import { gql } from '@urql/core';
+  import { onMount } from 'svelte';
 
-  </script>
+  // Данные для навигации
+  export let characters: { id: number; name: string }[] = [];
+  let episodes = [];
+  let seasons: any[] = [];
 
-  <header>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/characters">Characters</a></li>
-        <li><a href="/season/01">Season </a></li>
-      </ul>
-    </nav>
+  // GraphQL-запрос для получения эпизодов
+  const query = gql`
+    query {
+      episodes(page: 1) {
+        results {
+          id
+          name
+          episode
+        }
+      }
+    }
+  `;
 
-    <input
-      type="search"
-      name="search"
-      placeholder="Search"
-      aria-label="Search"
-    />
-    <table>
-      <thead>
+  // Загружаем данные о сезонах и эпизодах на клиенте
+  onMount(async () => {
+    try {
+      const result = await client.query(query,{}).toPromise();
+
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+
+      episodes = result.data?.episodes?.results || [];
+
+      // Парсинг сезонов из эпизодов
+      seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
+        const seasonMatch = episode.episode.match(/S(\d+)E/);
+        if (seasonMatch) {
+          const seasonNumber = seasonMatch[1].padStart(2, '0');
+          if (!acc.includes(seasonNumber)) {
+            acc.push(seasonNumber);
+          }
+        }
+        return acc;
+      }, []);
+    } catch (error) {
+      console.error('Error during GraphQL request:', error);
+    }
+  });
+</script>
+
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/characters">Characters</a></li>
+      {#each seasons as season}
+        <li><a href={`/season/${season}`}>Season {season}</a></li>
+      {/each}
+    </ul>
+  </nav>
+
+  <!-- Поле поиска -->
+  <input
+    type="search"
+    name="search"
+    placeholder="Search"
+    aria-label="Search"
+  />
+</header>
+
+<!-- Таблица персонажей -->
+{#if characters.length > 0}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each characters as character}
         <tr>
-          <th>ID</th>
-          <th>Name</th>
+          <td>{character.id}</td>
+          <td><a href={`/character/${character.id}`}>{character.name}</a></td>
         </tr>
-      </thead>
-      <tbody>
-        {#each characters as character}
-          <tr>
-            <td>{character.id}</td>
-            <td>{character.name}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  </header>
+      {/each}
+    </tbody>
+  </table>
+{/if}
 
-  <main>
-    <slot></slot>
-  </main>
+<main>
+  <slot></slot>
+</main>
 
-  <footer>
-    <p>© 2025 Rick & Morty Catalog</p>
-  </footer>
+<footer>
+  <p>© 2025 Rick & Morty Catalog</p>
+</footer>
+
 <style>
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
+header {
+  background: var(--primary);
+  padding: 1rem;
+  margin-left: 2%
 }
-
-th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-tr:hover {
-  background-color: #eaeaea;
-}
-  header {
-    background: var(--primary);
-    padding: 1rem;
-    margin-left: 2%
-  }
-
-  footer {
+footer {
     background: var(--secondary);
     text-align: center;
     position: fixed;
     bottom: 0;
     width: 100%;
   }
+
 
   nav a {
     /* text-decoration: none; */
@@ -97,9 +124,8 @@ tr:hover {
   main {
     padding: 3rem;
     /* margin: 0 auto; */
-    min-height: 50%;
-    width: 100%;
-    }
+    width: 1000px
+  }
 
   input {
     width: 15%;

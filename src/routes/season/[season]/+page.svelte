@@ -90,10 +90,14 @@
   <h1>Episodes for Season {currentSeason}</h1>
   <ul>
     {#each currentSeasonEpisodes as episode}
-      <li>{episode.name} ({episode.episode})</li>
+      <li>
+        <!-- Сделать эпизод кликабельным -->
+        <a href={`/season/${currentSeason}/${episode.id}`}>
+          {episode.name} ({episode.episode})
+        </a>
+      </li>
     {/each}
   </ul>
 {:else}
   <p>No episodes found for this season.</p>
 {/if}
-

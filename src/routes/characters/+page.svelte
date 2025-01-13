@@ -46,20 +46,3 @@
       </li>
     {/each}
   </ul>
-  
-  <!-- <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each characters as character}
-        <tr>
-          <td> <a href={`/characters/${character.id}`}> {character.id} </a></td>
-          <td>   {character.name}</td>
-        </tr>
-      {/each}
-    </tbody>
-  </table> -->
