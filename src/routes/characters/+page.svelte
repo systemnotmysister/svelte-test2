@@ -1,4 +1,4 @@
-
+<!-- 
   <script lang="ts">
     import { client } from '$lib/graphqlClient';
     
@@ -10,7 +10,6 @@
     
     let characters: Character[] = [];
     
-    // Запрос для получения списка персонажей
     const query = `
       query {
         characters(page: 10) {
@@ -44,4 +43,4 @@
         </a>
       </li>
     {/each}
-  </ul>
+  </ul> -->

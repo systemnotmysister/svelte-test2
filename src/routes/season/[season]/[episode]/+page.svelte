@@ -77,8 +77,10 @@
   <ul>
     {#each episode.characters as character}
       <li>
-        <img src={character.image} alt={character.name} />
-        <p>{character.name}</p>
+        <a href={`/characters/${character.id}`}>
+          <img src={character.image} alt={character.name} />
+          <p>{character.name}</p>
+        </a>
       </li>
     {/each}
   </ul>

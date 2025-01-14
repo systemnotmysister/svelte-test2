@@ -1,8 +1,13 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
-  import { page } from '$app/state';  // Импортируем page store для доступа к параметрам маршрута
+  import { page } from '$app/state';
 
-  // Типы данных
+  interface Episode {
+    id: string;
+    name: string;
+    episode: string;
+  }
+
   interface Character {
     id: number;
     name: string;
@@ -10,10 +15,12 @@
     species: string;
     gender: string;
     image: string;
+    episode: Episode[];
   }
 
   let character: Character | null = null;
 
+  // Запрос для получения героя и эпизодов
   const query = `
     query($id: ID!) {
       character(id: $id) {
@@ -23,6 +30,11 @@
         species
         gender
         image
+        episode {
+          id
+          name
+          episode
+        }
       }
     }
   `;
@@ -41,9 +53,9 @@
   };
 
   $: {
-    const characterId = page.params.characterId; 
+    const characterId = page.params.characterId;
     if (characterId) {
-      fetchCharacter(parseInt(characterId)); 
+      fetchCharacter(parseInt(characterId));
     }
   }
 </script>
@@ -51,12 +63,23 @@
 <h1>{character ? character.name : 'Загрузка...'}</h1>
 
 {#if character}
-<div>
-  <img src={character.image} alt={character.name} />
-  <p>Статус: {character.status}</p>
-  <p>Вид: {character.species}</p>
-  <p>Пол: {character.gender}</p>
-</div>
+  <div>
+    <img src={character.image} alt={character.name} />
+    <p>Age: {character.status}</p>
+    <p>Species: {character.species}</p>
+    <p>Gender: {character.gender}</p>
+
+    <h2>Took part in:</h2>
+    <ul>
+      {#each character.episode as episode}
+        <li>
+          <a href={`/season/${episode.episode.slice(1, 3)}/${episode.episode.slice(4, 6)}`}>
+            {episode.name} ({episode.episode})
+          </a>
+        </li>
+      {/each}
+    </ul>
+  </div>
 {:else}
-<p>Нет данных о персонаже</p>
+  <p>No character data</p>
 {/if}
