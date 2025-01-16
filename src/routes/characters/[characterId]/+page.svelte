@@ -1,85 +1,42 @@
 <script lang="ts">
-  import { client } from '$lib/graphqlClient';
-  import { page } from '$app/state';
+  import { page } from '$app/state'; // Для получения параметров из URL
+  import { useQuery } from 'urql';
+  import { GetCharacterDocument } from '$lib/graphql/generated/graphql'; // Импортируем документ запроса
+  import type { GetCharacterQuery, GetCharacterQueryVariables } from '$lib/graphql/generated/graphql'; // Импортируем типы
 
-  interface Episode {
-    id: string;
-    name: string;
-    episode: string;
-  }
+  // Получаем параметр characterId из URL
+  const characterId = page.params.characterId;
 
-  interface Character {
-    id: number;
-    name: string;
-    status: string;
-    species: string;
-    gender: string;
-    image: string;
-    episode: Episode[];
-  }
-
-  let character: Character | null = null;
-
-  // Запрос для получения героя и эпизодов
-  const query = `
-    query($id: ID!) {
-      character(id: $id) {
-        id
-        name
-        status
-        species
-        gender
-        image
-        episode {
-          id
-          name
-          episode
-        }
-      }
-    }
-  `;
-
-  const fetchCharacter = async (id: number) => {
-    try {
-      const { data } = await client.query(query, { id }).toPromise();
-      if (data && data.character) {
-        character = data.character;
-      } else {
-        console.error('Нет данных о персонаже');
-      }
-    } catch (error) {
-      console.error('Ошибка при получении данных:', error);
-    }
-  };
-
-  $: {
-    const characterId = page.params.characterId;
-    if (characterId) {
-      fetchCharacter(parseInt(characterId));
-    }
-  }
+  // Используем сгенерированный хук для выполнения GraphQL-запроса
+  const [{ data, fetching, error }] = useQuery<GetCharacterQuery, GetCharacterQueryVariables>({
+    query: GetCharacterDocument,
+    variables: { id: characterId }, // Указываем ID персонажа
+  });
 </script>
 
-<h1>{character ? character.name : 'Загрузка...'}</h1>
+<h1>{fetching ? 'Загрузка...' : data?.character?.name || 'Персонаж не найден'}</h1>
 
-{#if character}
+{#if data?.character}
   <div>
-    <img src={character.image} alt={character.name} />
-    <p>Age: {character.status}</p>
-    <p>Species: {character.species}</p>
-    <p>Gender: {character.gender}</p>
+    <img src={data.character.image} alt={data.character.name} />
+    <p>Status: {data.character.status}</p>
+    <p>Species: {data.character.species}</p>
+    <p>Gender: {data.character.gender}</p>
 
-    <h2>Took part in:</h2>
+    <h2>Episodes:</h2>
     <ul>
-      {#each character.episode as episode}
+      {#each data.character.episode as episode (episode?.id)}
         <li>
-          <a href={`/season/${episode.episode.slice(1, 3)}/${episode.episode.slice(4, 6)}`}>
-            {episode.name} ({episode.episode})
-          </a>
+          <a href={`/season/${episode?.episode?.slice(1, 3)}/${episode?.episode?.slice(4, 6)}`}>
+            {episode?.name || 'Без названия'} ({episode?.episode || 'Неизвестный эпизод'})         
+         </a>
         </li>
       {/each}
     </ul>
   </div>
+{:else if error}
+  <p>Ошибка: {error.message}</p>
 {:else}
-  <p>No character data</p>
+  <p>Нет данных о персонаже</p>
 {/if}
+

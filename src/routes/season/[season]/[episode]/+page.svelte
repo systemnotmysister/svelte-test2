@@ -2,7 +2,7 @@
   import { client } from '$lib/graphqlClient';
   import { page } from '$app/state';
   import { onMount } from 'svelte';
-
+  
   interface Character {
     id: string;
     name: string;

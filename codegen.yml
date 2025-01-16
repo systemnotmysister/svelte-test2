@@ -1,0 +1,11 @@
+schema: https://rickandmortyapi.com/graphql
+documents: src/lib/graphql/queries/**/*.ts
+generates:
+  src/lib/graphql/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-urql
+    config:
+      preResolveTypes: true
+      withHooks: true

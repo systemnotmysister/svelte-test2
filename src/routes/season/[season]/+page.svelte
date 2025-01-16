@@ -1,7 +1,7 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
   import { onMount, afterUpdate } from 'svelte'; 
-  import { page } from '$app/state';
+  import { page } from '$app/state'; // Подключаем стор страницы
   import { error } from '@sveltejs/kit';
 
   interface Episode {
@@ -65,14 +65,14 @@
   onMount(() => {
     loadEpisodes(); 
   });
-
-  afterUpdate(() => {
-    const newSeason = page.params.season || '';
-    if (newSeason !== currentSeason) {
-      currentSeason = newSeason;
-      loadEpisodes();
-    }
-  });
+  
+afterUpdate(() => {
+  const newSeason = page.params.season;
+  if (newSeason && newSeason !== currentSeason) {
+    currentSeason = newSeason;
+    loadEpisodes();
+  }
+});
 </script>
 
 {#if seasons.length > 0}
@@ -98,5 +98,5 @@
     {/each}
   </ul>
 {:else}
-  <p>No episodes found for this season.</p>
+  <p>Pick a season</p>
 {/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
   import { gql } from '@urql/core';
-  import { onMount } from 'svelte';
+  import { onMount} from 'svelte';
 
   // Данные для навигации
   export let characters: { id: number; name: string }[] = [];
@@ -9,54 +9,54 @@
   let seasons: any[] = [];
 
   // GraphQL-запрос для получения эпизодов
-  const query = gql`
-    query {
-      episodes(page: 1) {
-        results {
-          id
-          name
-          episode
-        }
-      }
-    }
-  `;
+  // const query = gql`
+  //   query {
+  //     episodes(page: 1) {
+  //       results {
+  //         id
+  //         name
+  //         episode
+  //       }
+  //     }
+  //   }
+  // `;
 
-  // Загружаем данные о сезонах и эпизодах на клиенте
-  onMount(async () => {
-    try {
-      const result = await client.query(query,{}).toPromise();
+  // // Загружаем данные о сезонах и эпизодах на клиенте
+  // onMount(async () => {
+  //   try {
+  //     const result = await client.query(query,{}).toPromise();
 
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
+  //     if (result.error) {
+  //       throw new Error(result.error.message);
+  //     }
 
-      episodes = result.data?.episodes?.results || [];
+  //     episodes = result.data?.episodes?.results || [];
 
-      // Парсинг сезонов из эпизодов
-      seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
-        const seasonMatch = episode.episode.match(/S(\d+)E/);
-        if (seasonMatch) {
-          const seasonNumber = seasonMatch[1].padStart(2, '0');
-          if (!acc.includes(seasonNumber)) {
-            acc.push(seasonNumber);
-          }
-        }
-        return acc;
-      }, []);
-    } catch (error) {
-      console.error('Error during GraphQL request:', error);
-    }
-  });
+  //     // Парсинг сезонов из эпизодов
+  //     seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
+  //       const seasonMatch = episode.episode.match(/S(\d+)E/);
+  //       if (seasonMatch) {
+  //         const seasonNumber = seasonMatch[1].padStart(2, '0');
+  //         if (!acc.includes(seasonNumber)) {
+  //           acc.push(seasonNumber);
+  //         }
+  //       }
+  //       return acc;
+  //     }, []);
+  //   } catch (error) {
+  //     console.error('Error during GraphQL request:', error);
+  //   }
+  // });
 </script>
 
 <header>
   <nav>
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/characters">Characters</a></li>
-      {#each seasons as season}
-        <li><a href={`/season/${season}`}>Season {season}</a></li>
-      {/each}
+      <li><a href={`/characters/${characters}`}>Characters</a></li>
+      <!-- {#each seasons as season} -->
+        <li><a href={`/season/[season]`}>Season </a></li>
+      <!-- {/each} -->
     </ul>
   </nav>
 
@@ -128,7 +128,7 @@ footer {
   }
 
   input {
-    width: 15%;
+    width: 32%;
     padding: 1rem;
   }
 
