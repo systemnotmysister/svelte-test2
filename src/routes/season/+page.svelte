@@ -13,7 +13,7 @@
   {/each}
   </ul>
 {:else}
-  <p>No episodes available for this season.</p>
+  <p>Choose season.</p>
 {/if}
 
 <h2>Other Seasons</h2>

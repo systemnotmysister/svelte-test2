@@ -1,85 +1,49 @@
 <script lang="ts">
-  import { client } from '$lib/graphqlClient';
-  import { page } from '$app/state';
-  import { onMount } from 'svelte';
+  import { page } from "$app/state";
+  import { onMount } from "svelte";
+  import { getContextClient, queryStore } from "@urql/svelte";
+  import {
+    GetEpisodeDocument,
+    type Episode,
+    type GetEpisodeQuery,
+    type GetEpisodeQueryVariables,
+  } from "$lib/graphql/generated/graphql";
 
-  interface Character {
-    id: string;
-    name: string;
-    image: string;
-  }
-
-  interface Episode {
-    id: string;
-    name: string;
-    episode: string;
-    characters: Character[];
-  }
-
-  let episode: Episode | null = null;
   let loading = true;
   let error: string | null = null;
 
-  const episodeQuery = `
-    query ($episode: String!) {
-      episodes(filter: { episode: $episode }) {
-        results {
-          id
-          name
-          episode
-          characters {
-            id
-            name
-            image
-          }
-        }
-      }
-    }
-  `;
+  const season = page.params.season;
+  const episodeNum = page.params.episode;
 
-  const loadEpisode = async () => {
-    const season = page.params.season;
-    const episodeNum = page.params.episode;
+  if (!season || !episodeNum) {
+    error = "Episode not found";
+    loading = false;
+  }
 
-    if (!season || !episodeNum) {
-      error = 'Episode not found';
-      loading = false;
-      return;
-    }
+  const formattedEpisode = `S${season.padStart(2, "0")}E${episodeNum.padStart(2, "0")}`;
 
-    const formattedEpisode = `S${season.padStart(2, '0')}E${episodeNum.padStart(2, '0')}`;
-
-    try {
-      const response = await client.query(episodeQuery, { episode: formattedEpisode }).toPromise();
-      if (response.error) {
-        error = response.error.message;
-      } else {
-        episode = response.data?.episodes?.results[0] || null;
-      }
-    } catch (err) {
-      error = 'Error fetching episode data';
-    } finally {
-      loading = false;
-    }
-  };
-
-  onMount(() => {
-    loadEpisode();
+  const store = queryStore<GetEpisodeQuery, GetEpisodeQueryVariables>({
+    client: getContextClient(),
+    query: GetEpisodeDocument,
+    variables: {
+      episode: formattedEpisode,
+    },
   });
 </script>
 
-{#if loading}
-  <p>Loading episode data...</p>
-{:else if error}
+{#if error}
   <p>{error}</p>
-{:else if episode}
-  <h1>{episode.name} ({episode.episode})</h1>
+{:else if $store.data?.episodes?.results?.[0]}
+  <h1>
+    {$store.data?.episodes?.results?.[0].name} ({$store.data?.episodes
+      ?.results?.[0].episode})
+  </h1>
   <ul>
-    {#each episode.characters as character}
+    {#each $store.data?.episodes?.results?.[0].characters as character}
       <li>
-        <a href={`/characters/${character.id}`}>
-          <img src={character.image} alt={character.name} />
-          <p>{character.name}</p>
+        <a href={`/characters/${character?.id}`}>
+          <img src={character?.image} alt={character?.name} />
+          <p>{character?.name}</p>
         </a>
       </li>
     {/each}

@@ -1,5 +1,5 @@
 // export const load = async ({ parent, params }) => {
-//   const { seasons, episodes } = await parent();  
+//   const { seasons , episodes } = await parent();  
 
 //   const currentSeason = params.season?.padStart(2, '0');
 
