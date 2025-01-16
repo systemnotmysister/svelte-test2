@@ -2,8 +2,7 @@
   import { client } from '$lib/graphqlClient';
   import { onMount, afterUpdate } from 'svelte'; 
   import { page } from '$app/state'; // Подключаем стор страницы
-  import { error } from '@sveltejs/kit';
-
+  
   interface Episode {
     id: string;
     name: string;

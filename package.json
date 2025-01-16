@@ -13,11 +13,12 @@
 		"generates": "graphql-codegen --config codegen.ts"
 	},
 	"devDependencies": {
-		"@graphql-codegen/cli": "5.0.3",
+		"@graphql-codegen/cli": "^5.0.3",
 		"@graphql-codegen/client-preset": "4.5.1",
 		"@graphql-codegen/typescript": "^4.1.2",
 		"@graphql-codegen/typescript-document-nodes": "4.0.12",
 		"@graphql-codegen/typescript-urql": "^4.0.0",
+		"@kitql/graphql-codegen": "^0.5.4",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.15.2",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
@@ -28,7 +29,6 @@
 	},
 	"dependencies": {
 		"-": "^0.0.1",
-		"@graphql-codegen/cli": "^5.0.3",
 		"@graphql-codegen/typescript-operations": "^4.4.0",
 		"@picocss/pico": "2.0.5",
 		"@sveltejs/adapter-cloudflare": "^5.0.0",

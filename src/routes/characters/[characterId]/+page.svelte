@@ -1,15 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state'; // Для получения параметров из URL
   import { useQuery } from 'urql';
-  import { GetCharacterDocument } from '$lib/graphql/generated/graphql'; // Импортируем документ запроса
+  import { GetCharacterDocument, useGetCharacterQuery } from '$lib/graphql/generated/graphql'; // Импортируем документ запроса
   import type { GetCharacterQuery, GetCharacterQueryVariables } from '$lib/graphql/generated/graphql'; // Импортируем типы
 
   // Получаем параметр characterId из URL
   const characterId = page.params.characterId;
 
   // Используем сгенерированный хук для выполнения GraphQL-запроса
-  const [{ data, fetching, error }] = useQuery<GetCharacterQuery, GetCharacterQueryVariables>({
-    query: GetCharacterDocument,
+  const [{ data, fetching, error }] = useGetCharacterQuery({
     variables: { id: characterId }, // Указываем ID персонажа
   });
 </script>
