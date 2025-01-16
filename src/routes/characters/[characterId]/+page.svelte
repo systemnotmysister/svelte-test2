@@ -1,41 +1,44 @@
 <script lang="ts">
-  import { page } from '$app/state'; // Для получения параметров из URL
-  import { useQuery } from 'urql';
-  import { GetCharacterDocument, useGetCharacterQuery } from '$lib/graphql/generated/graphql'; // Импортируем документ запроса
-  import type { GetCharacterQuery, GetCharacterQueryVariables } from '$lib/graphql/generated/graphql'; // Импортируем типы
+  import { page } from "$app/state";
+  import {
+    GetCharacterDocument,
+    type GetCharacterQuery,
+    type GetCharacterQueryVariables,
+  } from "$lib/graphql/generated/graphql";
+  import { getContextClient, queryStore } from "@urql/svelte";
 
-  // Получаем параметр characterId из URL
   const characterId = page.params.characterId;
 
-  // Используем сгенерированный хук для выполнения GraphQL-запроса
-  const [{ data, fetching, error }] = useGetCharacterQuery({
-    variables: { id: characterId }, // Указываем ID персонажа
+  const store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
+    client: getContextClient(),
+    query: GetCharacterDocument,
+    variables: {
+      id: characterId,
+    },
   });
 </script>
 
-<h1>{fetching ? 'Загрузка...' : data?.character?.name || 'Персонаж не найден'}</h1>
-
-{#if data?.character}
+{#if $store.data?.character}
   <div>
-    <img src={data.character.image} alt={data.character.name} />
-    <p>Status: {data.character.status}</p>
-    <p>Species: {data.character.species}</p>
-    <p>Gender: {data.character.gender}</p>
+    <img src={$store.data.character.image} alt={$store.data.character.name} />
+    <p>Status: {$store.data.character.status}</p>
+    <p>Species: {$store.data.character.species}</p>
+    <p>Gender: {$store.data.character.gender}</p>
 
     <h2>Episodes:</h2>
     <ul>
-      {#each data.character.episode as episode (episode?.id)}
+      {#each $store.data.character.episode as episode (episode?.id)}
         <li>
-          <a href={`/season/${episode?.episode?.slice(1, 3)}/${episode?.episode?.slice(4, 6)}`}>
-            {episode?.name || 'Без названия'} ({episode?.episode || 'Неизвестный эпизод'})         
-         </a>
+          <a
+            href={`/season/${episode?.episode?.slice(1, 3)}/${episode?.episode?.slice(4, 6)}`}
+          >
+            {episode?.name || "Без названия"} ({episode?.episode ||
+              "Неизвестный эпизод"})
+          </a>
         </li>
       {/each}
     </ul>
   </div>
-{:else if error}
-  <p>Ошибка: {error.message}</p>
 {:else}
   <p>Нет данных о персонаже</p>
 {/if}
-

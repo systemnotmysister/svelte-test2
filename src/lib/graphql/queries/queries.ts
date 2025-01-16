@@ -19,7 +19,7 @@ export const GET_CHARACTER = gql`
 `;
 
 export const GET_EPISODE = gql`
-  query episodeQuery($episode: String!) {
+  query getEpisode($episode: String!) {
     episodes(filter: { episode: $episode }) {
       results {
         id
@@ -35,7 +35,7 @@ export const GET_EPISODE = gql`
   }
 `;
 // export const episodeQuery = gql`
-// query episodeQuery($episode: String!) {
+// query episode($episode: String!) {
 //   episodes(filter: { episode: $episode }) {
 //     results {
 //       id

@@ -210,12 +210,12 @@ export type GetCharacterQueryVariables = Exact<{
 
 export type GetCharacterQuery = { __typename?: 'Query', character?: { __typename?: 'Character', id?: string | null, name?: string | null, status?: string | null, species?: string | null, gender?: string | null, image?: string | null, episode: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null } | null> } | null };
 
-export type EpisodeQueryQueryVariables = Exact<{
+export type GetEpisodeQueryVariables = Exact<{
   episode: Scalars['String']['input'];
 }>;
 
 
-export type EpisodeQueryQuery = { __typename?: 'Query', episodes?: { __typename?: 'Episodes', results?: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null, characters: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null } | null> } | null> | null } | null };
+export type GetEpisodeQuery = { __typename?: 'Query', episodes?: { __typename?: 'Episodes', results?: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null, characters: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null } | null> } | null> | null } | null };
 
 
 export const GetCharacterDocument = gql`
@@ -239,8 +239,8 @@ export const GetCharacterDocument = gql`
 export function useGetCharacterQuery(options: Omit<Urql.UseQueryArgs<GetCharacterQueryVariables>, 'query'>) {
   return Urql.useQuery<GetCharacterQuery, GetCharacterQueryVariables>({ query: GetCharacterDocument, ...options });
 };
-export const EpisodeQueryDocument = gql`
-    query episodeQuery($episode: String!) {
+export const GetEpisodeDocument = gql`
+    query getEpisode($episode: String!) {
   episodes(filter: {episode: $episode}) {
     results {
       id
@@ -256,6 +256,6 @@ export const EpisodeQueryDocument = gql`
 }
     `;
 
-export function useEpisodeQueryQuery(options: Omit<Urql.UseQueryArgs<EpisodeQueryQueryVariables>, 'query'>) {
-  return Urql.useQuery<EpisodeQueryQuery, EpisodeQueryQueryVariables>({ query: EpisodeQueryDocument, ...options });
+export function useGetEpisodeQuery(options: Omit<Urql.UseQueryArgs<GetEpisodeQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetEpisodeQuery, GetEpisodeQueryVariables>({ query: GetEpisodeDocument, ...options });
 };
