@@ -34,19 +34,15 @@ export const GET_EPISODE = gql`
     }
   }
 `;
-// export const episodeQuery = gql`
-// query episode($episode: String!) {
-//   episodes(filter: { episode: $episode }) {
-//     results {
-//       id
-//       name
-//       episode
-//       characters {
-//         id
-//         name
-//         image
-//       }
-//     }
-//   }
-// }
-// `;
+
+export const GET_EPISODES = gql`
+query getEpisodes{
+  episodes(page: 1) {
+    results {
+      id
+      name
+      episode
+    }
+  }
+}
+`;

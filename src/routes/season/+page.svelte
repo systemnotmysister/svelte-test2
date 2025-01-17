@@ -1,7 +1,7 @@
 <script lang="ts">
   export let seasons: string[] = [];
   export let currentSeasonEpisodes: any[] = [];
-  export let season: string = '1';
+  export let season: string
 </script>
 
 <h1>Season {season}</h1>

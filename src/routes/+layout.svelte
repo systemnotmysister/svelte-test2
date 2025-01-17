@@ -1,23 +1,60 @@
 <script lang="ts">
   import { client } from '$lib/graphqlClient';
-  import {  Client, gql  } from '@urql/core';
+  import { gql } from '@urql/core';
   import { onMount } from 'svelte';
-  import { setContextClient } from "@urql/svelte";
-  setContextClient(client)
 
   // Данные для навигации
   export let characters: { id: number; name: string }[] = [];
+  let episodes = [];
+  let seasons: any[] = [];
 
+  // GraphQL-запрос для получения эпизодов
+  const query = gql`
+    query {
+      episodes(page: 1) {
+        results {
+          id
+          name
+          episode
+        }
+      }
+    }
+  `;
+
+  // Загружаем данные о сезонах и эпизодах на клиенте
+  onMount(async () => {
+    try {
+      const result = await client.query(query,{}).toPromise();
+
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+
+      episodes = result.data?.episodes?.results || [];
+
+      // Парсинг сезонов из эпизодов
+      seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
+        const seasonMatch = episode.episode.match(/S(\d+)E/);
+        if (seasonMatch) {
+          const seasonNumber = seasonMatch[1].padStart(2, '0');
+          if (!acc.includes(seasonNumber)) {
+            acc.push(seasonNumber);
+          }
+        }
+        return acc;
+      }, []);
+    } catch (error) {
+      console.error('Error during GraphQL request:', error);
+    }
+  });
 </script>
 
 <header>
   <nav>
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href={`/characters/${characters}`}>Characters</a></li>
-      <!-- {#each seasons as season} -->
+      <li><a href="/characters">Characters</a></li>
         <li><a href={`/season/[season]`}>Season </a></li>
-      <!-- {/each} -->
     </ul>
   </nav>
 
@@ -89,7 +126,7 @@ footer {
   }
 
   input {
-    width: 32%;
+    width: 15%;
     padding: 1rem;
   }
 

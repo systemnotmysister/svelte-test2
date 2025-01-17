@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/state";
+  import { page } from "$app/stores";
   import {
     GetCharacterDocument,
     type GetCharacterQuery,
@@ -7,7 +7,7 @@
   } from "$lib/graphql/generated/graphql";
   import { getContextClient, queryStore } from "@urql/svelte";
 
-  const characterId = page.params.characterId;
+  const characterId = $page.params.characterId;
 
   const store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
     client: getContextClient(),

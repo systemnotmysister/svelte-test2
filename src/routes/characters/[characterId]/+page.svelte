@@ -1,31 +1,46 @@
 <script lang="ts">
-  import { page } from "$app/state";
+  import { page } from "$app/stores";
   import {
     GetCharacterDocument,
     type GetCharacterQuery,
     type GetCharacterQueryVariables,
   } from "$lib/graphql/generated/graphql";
   import { getContextClient, queryStore } from "@urql/svelte";
+  import { client } from "$lib/graphqlClient";
 
-  const characterId = page.params.characterId;
+  import { setContextClient } from "@urql/svelte";
+  setContextClient(client);
 
-  const store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
+  $: characterId = $page.params.characterId;
+
+  // Создаем store для запроса
+  let store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
     client: getContextClient(),
     query: GetCharacterDocument,
-    variables: {
-      id: characterId,
-    },
+    variables: { id: "" }, // Инициализируем с пустым id
   });
+
+  $: if (characterId) {
+    store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
+      client: getContextClient(),
+      query: GetCharacterDocument,
+      variables: { id: characterId },
+    });
+  }
 </script>
 
-{#if $store.data?.character}
+{#if $store.fetching}
+  <p>Загрузка данных персонажа...</p>
+{:else if $store.error}
+  <p>Ошибка: {$store.error.message}</p>
+{:else if $store.data?.character}
   <div>
     <img src={$store.data.character.image} alt={$store.data.character.name} />
-    <p>Status: {$store.data.character.status}</p>
-    <p>Species: {$store.data.character.species}</p>
-    <p>Gender: {$store.data.character.gender}</p>
+    <p>Статус: {$store.data.character.status}</p>
+    <p>Вид: {$store.data.character.species}</p>
+    <p>Пол: {$store.data.character.gender}</p>
 
-    <h2>Episodes:</h2>
+    <h2>Эпизоды:</h2>
     <ul>
       {#each $store.data.character.episode as episode (episode?.id)}
         <li>
