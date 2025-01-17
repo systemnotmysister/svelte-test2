@@ -74,7 +74,7 @@
     }
   });
 </script>
-
+<div class="div">
 {#if seasons.length > 0}
   <h2>Available Seasons</h2>
   <ul>
@@ -99,4 +99,12 @@
   </ul>
 {:else}
   <p>No episodes found for this season.</p>
+  
 {/if}
+</div>
+
+<style>
+  div {
+    margin-left: 8%;
+  }
+</style>

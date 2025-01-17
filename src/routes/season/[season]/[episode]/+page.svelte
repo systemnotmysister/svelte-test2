@@ -59,3 +59,21 @@
 {:else}
   <p>Episode not found.</p>
 {/if}
+
+<style>
+    ul {
+    display: flex;
+    flex-flow: wrap;
+    width: 100%;
+    justify-content: center
+
+    }
+    li {
+      width: 22%;
+      display: flex;
+    }
+    h1{
+      margin-left: 7%;
+      margin-bottom: 4%;
+    }
+</style>

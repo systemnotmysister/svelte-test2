@@ -99,7 +99,7 @@
 header {
   background: var(--primary);
   padding: 1rem;
-  margin-left: 2%
+  margin-left: 10%
 }
 footer {
     background: var(--secondary);
@@ -122,16 +122,19 @@ footer {
   main {
     padding: 3rem;
     /* margin: 0 auto; */
-    width: 1000px
+    width: 100%
   }
 
   input {
-    width: 15%;
-    padding: 1rem;
+    width: 25%;
+    padding: 2rem;
   }
 
 main {
   flex: 1; 
+  padding: 4rem;
+    margin-top: -3%;
+    width: 100%
 }
 
 footer {

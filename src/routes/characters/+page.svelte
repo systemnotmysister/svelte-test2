@@ -20,11 +20,16 @@
 
 {#if $store.data?.character}
   <div>
-    <img src={$store.data.character.image} alt={$store.data.character.name} />
-    <p>Status: {$store.data.character.status}</p>
-    <p>Species: {$store.data.character.species}</p>
-    <p>Gender: {$store.data.character.gender}</p>
 
+    <div class="ep1">
+      <img src={$store.data.character.image} alt={$store.data.character.name} />
+      <p>Status: {$store.data.character.status}</p>
+      <p>Species: {$store.data.character.species}</p>
+      <p>Gender: {$store.data.character.gender}</p>
+    </div>   
+   
+   <div class="ep2">
+   
     <h2>Episodes:</h2>
     <ul>
       {#each $store.data.character.episode as episode (episode?.id)}
@@ -39,6 +44,27 @@
       {/each}
     </ul>
   </div>
+  </div>
 {:else}
   <p>Нет данных о персонаже</p>
 {/if}
+
+
+
+<style>
+  div {
+  display: flex;
+  flex-flow: wrap;
+  width: 100%;
+  justify-content: center
+
+  }
+  li {
+    width: 22%;
+    display: flex;
+  }
+  h1{
+    margin-left: 7%;
+    margin-bottom: 4%;
+  }
+</style>
