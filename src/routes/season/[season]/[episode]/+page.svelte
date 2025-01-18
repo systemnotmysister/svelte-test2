@@ -43,9 +43,9 @@
 {:else if $store.error}
   <p>Error: {$store.error.message}</p>
 {:else if $store.data?.episodes?.results?.[0]}
-  <h1>
+  <h2>
     {$store.data.episodes.results[0].name} ({$store.data.episodes.results[0].episode})
-  </h1>
+  </h2>
   <ul>
     {#each $store.data.episodes.results[0].characters as character}
       <li>
@@ -62,18 +62,20 @@
 
 <style>
     ul {
-    display: flex;
+      display: flex;
     flex-flow: wrap;
-    width: 100%;
-    justify-content: center
-
+    width: 89%;
+    justify-content: space-between;
+    margin: 0px -2.5% auto;
     }
     li {
-      width: 22%;
       display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     }
-    h1{
-      margin-left: 7%;
-      margin-bottom: 4%;
+    h2{
+    width: 100%;
+    display: flex;
+    margin-left: 2%;
     }
 </style>

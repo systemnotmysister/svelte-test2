@@ -66,7 +66,6 @@
     aria-label="Search"
   />
 </header>
-
 <!-- Таблица персонажей -->
 {#if characters.length > 0}
   <table>
@@ -86,7 +85,6 @@
     </tbody>
   </table>
 {/if}
-
 <main>
   <slot></slot>
 </main>
@@ -98,8 +96,13 @@
 <style>
 header {
   background: var(--primary);
-  padding: 1rem;
-  margin-left: 10%
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin-left: 9%;
+    margin-top: 3%;
+    margin-bottom: 4%;
+    justify-content: flex-end;
 }
 footer {
     background: var(--secondary);
@@ -108,7 +111,6 @@ footer {
     bottom: 0;
     width: 100%;
   }
-
 
   nav a {
     /* text-decoration: none; */
@@ -120,22 +122,24 @@ footer {
 
 
   main {
-    padding: 3rem;
-    /* margin: 0 auto; */
-    width: 100%
+    display: flex;
+    margin: 0px 9% auto;
+    width: 84%;
+    flex-wrap: wrap;
+    flex-direction: column
   }
 
   input {
-    width: 25%;
+    width: 300px;
     padding: 2rem;
   }
 
-main {
+/* main {
   flex: 1; 
-  padding: 4rem;
-    margin-top: -3%;
+  padding: 2rem;
+      margin-top: -10%;
     width: 100%
-}
+} */
 
 footer {
   background: var(--secondary);

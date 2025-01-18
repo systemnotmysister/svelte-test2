@@ -63,8 +63,5 @@
     width: 22%;
     display: flex;
   }
-  h1{
-    margin-left: 7%;
-    margin-bottom: 4%;
-  }
+
 </style>

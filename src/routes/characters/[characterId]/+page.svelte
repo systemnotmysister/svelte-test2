@@ -57,3 +57,9 @@
 {:else}
   <p>Нет данных о персонаже</p>
 {/if}
+
+<style>
+/* div {
+  margin-left: 10%;
+} */
+</style>

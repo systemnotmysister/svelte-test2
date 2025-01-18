@@ -103,8 +103,3 @@
 {/if}
 </div>
 
-<style>
-  div {
-    margin-left: 8%;
-  }
-</style>
