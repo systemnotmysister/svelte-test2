@@ -64,9 +64,9 @@
     ul {
       display: flex;
     flex-flow: wrap;
-    width: 89%;
+    width: 95%;
     justify-content: space-between;
-    margin: 0px -2.5% auto;
+    margin: 0px -2% auto;
     }
     li {
       display: flex;
@@ -78,4 +78,5 @@
     display: flex;
     margin-left: 2%;
     }
+    
 </style>

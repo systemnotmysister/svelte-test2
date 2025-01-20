@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { client } from '$lib/graphqlClient';
   import { onMount } from 'svelte';
 
@@ -69,4 +69,4 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #eaeaea;
 }
-</style>
+</style> -->

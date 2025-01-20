@@ -1,98 +1,60 @@
 <script lang="ts">
-  import { client } from '$lib/graphqlClient';
-  import { gql } from '@urql/core';
-  import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { goto } from '$app/navigation';
 
-  // Данные для навигации
-  export let characters: { id: number; name: string }[] = [];
-  let episodes = [];
-  let seasons: any[] = [];
+  let search = writable(''); // Реактивное хранилище для поискового запроса
 
-  // GraphQL-запрос для получения эпизодов
-  const query = gql`
-    query {
-      episodes(page: 1) {
-        results {
-          id
-          name
-          episode
-        }
-      }
+  // Функция для обработки ввода в поле поиска
+  function handleSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    search.set(input.value);
+  }
+
+  // Функция для отправки запроса при нажатии Enter или на кнопке Submit
+  function handleSubmit() {
+    const input = $search; // Получаем текущее значение из хранилища
+    if (input) {
+      goto(`/search?q=${input}`);  // Навигация с параметром поиска
     }
-  `;
+  }
 
-  // Загружаем данные о сезонах и эпизодах на клиенте
-  onMount(async () => {
-    try {
-      const result = await client.query(query,{}).toPromise();
-
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
-
-      episodes = result.data?.episodes?.results || [];
-
-      // Парсинг сезонов из эпизодов
-      seasons = episodes.reduce((acc: string[], episode: { episode: string }) => {
-        const seasonMatch = episode.episode.match(/S(\d+)E/);
-        if (seasonMatch) {
-          const seasonNumber = seasonMatch[1].padStart(2, '0');
-          if (!acc.includes(seasonNumber)) {
-            acc.push(seasonNumber);
-          }
-        }
-        return acc;
-      }, []);
-    } catch (error) {
-      console.error('Error during GraphQL request:', error);
+  // Функция для обработки нажатия клавиши Enter
+  function handleKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      handleSubmit(); // Отправить запрос, если нажата клавиша Enter
     }
-  });
+  }
 </script>
 
 <header>
   <nav>
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/characters">Characters</a></li>
-        <li><a href={`/season/[season]`}>Season </a></li>
+      <li><a href="/">Characters</a></li>
+      <li><a href={`/season/01`}>Season</a></li>
     </ul>
   </nav>
 
-  <!-- Поле поиска -->
   <input
     type="search"
     name="search"
     placeholder="Search"
     aria-label="Search"
+    bind:value={$search}
+    on:input={handleSearch}     
+    on:keypress={handleKeyPress} 
   />
+
+  <button on:click={handleSubmit}>Search</button>  <!-- Кнопка для отправки запроса -->
 </header>
-<!-- Таблица персонажей -->
-{#if characters.length > 0}
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each characters as character}
-        <tr>
-          <td>{character.id}</td>
-          <td><a href={`/character/${character.id}`}>{character.name}</a></td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-{/if}
+
 <main>
-  <slot></slot>
+  <slot></slot>  <!-- Контент для страницы будет отображаться здесь -->
 </main>
 
 <footer>
   <p>© 2025 Rick & Morty Catalog</p>
 </footer>
-
 <style>
 header {
   background: var(--primary);

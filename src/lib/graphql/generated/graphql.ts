@@ -217,6 +217,18 @@ export type GetEpisodeQueryVariables = Exact<{
 
 export type GetEpisodeQuery = { __typename?: 'Query', episodes?: { __typename?: 'Episodes', results?: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null, characters: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null } | null> } | null> | null } | null };
 
+export type GetEpisodesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEpisodesQuery = { __typename?: 'Query', episodes?: { __typename?: 'Episodes', results?: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null } | null> | null } | null };
+
+export type GetSearchResultsQueryVariables = Exact<{
+  search: Scalars['String']['input'];
+}>;
+
+
+export type GetSearchResultsQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', results?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, status?: string | null, species?: string | null, gender?: string | null, image?: string | null } | null> | null } | null, episodes?: { __typename?: 'Episodes', results?: Array<{ __typename?: 'Episode', id?: string | null, name?: string | null, episode?: string | null, characters: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null } | null> } | null> | null } | null };
+
 
 export const GetCharacterDocument = gql`
     query getCharacter($id: ID!) {
@@ -258,4 +270,49 @@ export const GetEpisodeDocument = gql`
 
 export function useGetEpisodeQuery(options: Omit<Urql.UseQueryArgs<GetEpisodeQueryVariables>, 'query'>) {
   return Urql.useQuery<GetEpisodeQuery, GetEpisodeQueryVariables>({ query: GetEpisodeDocument, ...options });
+};
+export const GetEpisodesDocument = gql`
+    query getEpisodes {
+  episodes(page: 1) {
+    results {
+      id
+      name
+      episode
+    }
+  }
+}
+    `;
+
+export function useGetEpisodesQuery(options?: Omit<Urql.UseQueryArgs<GetEpisodesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetEpisodesQuery, GetEpisodesQueryVariables>({ query: GetEpisodesDocument, ...options });
+};
+export const GetSearchResultsDocument = gql`
+    query getSearchResults($search: String!) {
+  characters(filter: {name: $search}) {
+    results {
+      id
+      name
+      status
+      species
+      gender
+      image
+    }
+  }
+  episodes(filter: {name: $search}) {
+    results {
+      id
+      name
+      episode
+      characters {
+        id
+        name
+        image
+      }
+    }
+  }
+}
+    `;
+
+export function useGetSearchResultsQuery(options: Omit<Urql.UseQueryArgs<GetSearchResultsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetSearchResultsQuery, GetSearchResultsQueryVariables>({ query: GetSearchResultsDocument, ...options });
 };

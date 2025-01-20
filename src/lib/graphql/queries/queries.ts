@@ -46,3 +46,31 @@ query getEpisodes{
   }
 }
 `;
+
+
+export const GET_SEARCH_QUERY = gql`
+  query getSearchResults($search: String!) {
+    characters(filter: { name: $search }) {
+      results {
+        id
+        name
+        status
+        species
+        gender
+        image
+      }
+    }
+    episodes(filter: { name: $search }) {
+      results {
+        id
+        name
+        episode
+        characters {
+          id
+          name
+          image
+        }
+      }
+    }
+  }
+`;
