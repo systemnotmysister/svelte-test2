@@ -13,11 +13,11 @@
 
   $: characterId = $page.params.characterId;
 
-  // Создаем store для запроса
+
   let store = queryStore<GetCharacterQuery, GetCharacterQueryVariables>({
     client: getContextClient(),
     query: GetCharacterDocument,
-    variables: { id: "" }, // Инициализируем с пустым id
+    variables: { id: "" },
   });
 
   $: if (characterId) {
