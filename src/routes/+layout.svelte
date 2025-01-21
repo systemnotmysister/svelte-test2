@@ -1,51 +1,43 @@
-<script lang="ts">
-  import { writable } from 'svelte/store';
+<script>
+  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  let search = writable(''); // Реактивное хранилище для поискового запроса
+  let searchParam = '';
 
-  // Функция для обработки ввода в поле поиска
-  function handleSearch(event: Event) {
-    const input = event.target as HTMLInputElement;
-    search.set(input.value);
-  }
-
-  // Функция для отправки запроса при нажатии Enter или на кнопке Submit
-  function handleSubmit() {
-    const input = $search; // Получаем текущее значение из хранилища
-    if (input) {
-      goto(`/search?q=${input}`);  // Навигация с параметром поиска
+  const handleSubmit = (/** @type {{ preventDefault: () => void; }} */ event) => {
+    event.preventDefault();
+    if (searchParam.trim().length >= 3) {
+      goto(`/search?q=${searchParam.trim()}`);
     }
-  }
-
-  // Функция для обработки нажатия клавиши Enter
-  function handleKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      handleSubmit(); // Отправить запрос, если нажата клавиша Enter
-    }
-  }
+  };
 </script>
 
+
+
 <header>
+  
   <nav>
+
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/">Characters</a></li>
       <li><a href={`/season/01`}>Season</a></li>
     </ul>
   </nav>
+  <form on:submit={handleSubmit}>
+    <input
+      bind:value={searchParam}
+      placeholder="Search"
+      aria-label="Search"
+      minlength="3"
+      required
+      type="search"
+      name="search"
+    />
+    <button type="submit">&#x1F50E
+    </button>
+  </form>
 
-  <input
-    type="search"
-    name="search"
-    placeholder="Search"
-    aria-label="Search"
-    bind:value={$search}
-    on:input={handleSearch}     
-    on:keypress={handleKeyPress} 
-  />
-
-  <button on:click={handleSubmit}>Search</button>  <!-- Кнопка для отправки запроса -->
 </header>
 
 <main>
@@ -69,7 +61,7 @@ header {
 footer {
     background: var(--secondary);
     text-align: center;
-    position: fixed;
+    position: relative;
     bottom: 0;
     width: 100%;
   }
@@ -80,7 +72,13 @@ footer {
     color: var(--primary-text);
     margin-left: 15%
   }
-
+  button{
+    width: 65px;
+    margin-left: 1%;
+    border-radius: 15px;
+    height: 70px;
+    background-color: white !important;
+  }
 
 
   main {
@@ -92,7 +90,7 @@ footer {
   }
 
   input {
-    width: 300px;
+    width: 250px;
     padding: 2rem;
   }
 

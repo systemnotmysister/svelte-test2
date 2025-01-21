@@ -26,6 +26,7 @@
       query: GetCharacterDocument,
       variables: { id: characterId },
     });
+    console.log(GetCharacterDocument)
   }
 </script>
 
