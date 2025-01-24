@@ -1,29 +1,28 @@
 <script>
-  import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
+  import { goto } from "$app/navigation";
 
-  let searchParam = '';
+  let searchParam = "";
 
-  const handleSubmit = (/** @type {{ preventDefault: () => void; }} */ event) => {
+  const handleSubmit = (
+    /** @type {{ preventDefault: () => void; }} */ event
+  ) => {
     event.preventDefault();
     if (searchParam.trim().length >= 3) {
       goto(`/search?q=${searchParam.trim()}`);
     }
   };
+  
 </script>
 
-
-
 <header>
-  
   <nav>
-
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/">Characters</a></li>
       <li><a href={`/season/01`}>Season</a></li>
     </ul>
   </nav>
+  
   <form on:submit={handleSubmit}>
     <input
       bind:value={searchParam}
@@ -34,22 +33,21 @@
       type="search"
       name="search"
     />
-    <button type="submit">&#x1F50E
-    </button>
+    <button type="submit">&#x1F50E </button>
   </form>
-
 </header>
 
 <main>
-  <slot></slot> 
+  <slot></slot>
 </main>
 
 <footer>
   <p>© 2025 Rick & Morty Catalog</p>
 </footer>
+
 <style>
-header {
-  background: var(--primary);
+  header {
+    background: var(--primary);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -57,8 +55,8 @@ header {
     margin-top: 3%;
     margin-bottom: 4%;
     justify-content: flex-end;
-}
-footer {
+  }
+  footer {
     background: var(--secondary);
     text-align: center;
     position: relative;
@@ -70,9 +68,9 @@ footer {
     /* text-decoration: none; */
     margin-right: 1rem;
     color: var(--primary-text);
-    margin-left: 15%
+    margin-left: 15%;
   }
-  button{
+  button {
     width: 65px;
     margin-left: 1%;
     border-radius: 15px;
@@ -80,13 +78,12 @@ footer {
     background-color: white !important;
   }
 
-
   main {
     display: flex;
     margin: 0px 9% auto;
     width: 84%;
     flex-wrap: wrap;
-    flex-direction: column
+    flex-direction: column;
   }
 
   input {
@@ -94,17 +91,17 @@ footer {
     padding: 2rem;
   }
 
-/* main {
+  /* main {
   flex: 1; 
   padding: 2rem;
       margin-top: -10%;
     width: 100%
 } */
 
-footer {
-  background: var(--secondary);
-  padding: 1rem;
-  text-align: center;
-  position: relative;
-}
+  footer {
+    background: var(--secondary);
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+  }
 </style>
