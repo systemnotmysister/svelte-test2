@@ -1,0 +1,19 @@
+name = "svelte-test2-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-30"
+
+account_id = "b5bf594871f3af1c40e9d9dd2eda36f6"
+
+# Используем тот же домен
+workers_dev = true
+routes = [
+  { pattern = "svelte-test2.pages.dev/api/*", zone_name = "svelte-test2.pages.dev" }
+]
+
+kv_namespaces = [
+  { binding = "KV", id = "14c32315ad5d40cb9987bd9572fc8312" }
+]
+
+
+
+ 

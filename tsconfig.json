@@ -9,7 +9,18 @@
 	  "skipLibCheck": true,
 	  "sourceMap": true,
 	  "strict": true,
-	  "moduleResolution": "bundler"
-	}
+	  "moduleResolution": "bundler",
+	  "baseUrl": ".",   // Устанавливаем базовый путь на корень проекта
+	  "paths": {
+		"$lib/*": ["src/lib/*"],
+		"$lib/graphqlClient": ["src/lib/graphqlClient.ts"],
+		"$lib/graphql/generated/graphql": ["src/lib/graphql/generated/graphql.ts"]
+	  }
+	},
+	"types": ["@cloudflare/workers-types"],
+	"include": [
+	  "src/**/*.ts",
+	  "src/**/*.svelte"
+	]
   }
   

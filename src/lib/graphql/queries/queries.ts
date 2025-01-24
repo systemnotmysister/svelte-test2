@@ -48,7 +48,7 @@ query getEpisodes{
 `;
 
 
-export const GET_SEARCH_QUERY = gql`
+export const SEARCH_QUERY = gql`
   query getSearchResults($search: String!) {
     characters(filter: { name: $search }) {
       results {
